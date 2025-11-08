@@ -7,7 +7,6 @@ import { urlFor } from '@/lib/sanity/client';
 import { Slideshow, SlideshowImage } from '@/types';
 
 const ImageSlideshow = () => {
-  const [isPaused, setIsPaused] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [slideshow, setSlideshow] = useState<Slideshow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +61,7 @@ const ImageSlideshow = () => {
   // Auto-advance slideshow
   useEffect(() => {
     const images = slideshow?.images || [];
-    if (!isPaused && images.length > 0) {
+    if (images.length > 0) {
       intervalRef.current = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
       }, 2800); // Change image every 2.8 seconds
@@ -73,23 +72,7 @@ const ImageSlideshow = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isPaused, slideshow?.images?.length]);
-
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-  };
-
-  const handleTouchStart = () => {
-    setIsPaused(true);
-  };
-
-  const handleTouchEnd = () => {
-    setIsPaused(false);
-  };
+  }, [slideshow?.images?.length]);
 
   const images = slideshow?.images || [];
 
@@ -124,10 +107,6 @@ const ImageSlideshow = () => {
           : 'w-11/12 md:w-4/5 lg:w-3/4'
       }`}
       style={{ aspectRatio: currentAspectRatio }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <div className="flex h-full transition-transform duration-500 ease-in-out"
            style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}>

@@ -4,6 +4,7 @@ import { Star, BookOpen, Users, Award, Lightbulb, Brain, Target, Clock, RefreshC
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import ImageSlideshow from '@/components/ui/image-slideshow';
+import ScrollAnimate from '@/components/ui/scroll-animate';
 
 export default async function Home() {
   return (
@@ -29,6 +30,7 @@ export default async function Home() {
         </section>
 
         {/* About Section */}
+        <ScrollAnimate>
         <section id="about" className="py-12 md:py-16 bg-white">
           <div className="container">
             <div className="max-w-4xl mx-auto">
@@ -64,8 +66,10 @@ export default async function Home() {
             </div>
           </div>
         </section>
+        </ScrollAnimate>
 
         {/* Need Guidance Section */}
+        <ScrollAnimate>
         <section className="py-12 md:py-8 bg-gradient-to-b from-blue-50 to-purple-50 rounded-3xl mx-4 md:mx-8">
           <div className="container">
             <div className="max-w-4xl mx-auto">
@@ -140,6 +144,7 @@ export default async function Home() {
             </div>
           </div>
         </section>
+        </ScrollAnimate>
 
         {/* Features Section - Hidden */}
         {/* <section className="pt-6 pb-6 bg-white">
@@ -186,16 +191,31 @@ export default async function Home() {
         </section> */}
 
         {/* Image Slideshow Section */}
+        <ScrollAnimate>
         <section className="py-12 md:py-16 bg-gray-50">
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">🎉 SAMPLES 🎉</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">🎉 SAMPLES 🎉</h2>
+              
+              {/* Subject Tags */}
+              <div className="subject-tags">
+                <span className="subject-tag tag-surgery">#surgery</span>
+                <span className="subject-tag tag-gyne-obs">#gyne-obs</span>
+                <span className="subject-tag tag-medicine">#medicine</span>
+                <span className="subject-tag tag-pharma">#pharma</span>
+                <span className="subject-tag tag-micro">#micro</span>
+                <span className="subject-tag tag-forensic">#forensic</span>
+                <span className="subject-tag tag-com-med">#com-med</span>
+              </div>
+              
               <ImageSlideshow />
             </div>
           </div>
         </section>
+        </ScrollAnimate>
 
         {/* CTA Section */}
+        <ScrollAnimate>
         <section className="py-12 md:py-16 bg-black text-white">
           <div className="container text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">SUPERCHARGE YOUR STUDIES</h2>
@@ -210,6 +230,7 @@ export default async function Home() {
             </Link>
           </div>
         </section>
+        </ScrollAnimate>
       </main>
       
       <Footer />
