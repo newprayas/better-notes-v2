@@ -241,6 +241,15 @@ export default function CheckoutPage() {
                         <span className="font-bold">Total</span>
                         <span className="font-bold">{cart.finalTotal} tk</span>
                       </div>
+                      
+                      {/* Gmail Pill Display */}
+                      {emailConfirmed && gmailAddress && (
+                        <div className="mt-3 flex justify-end">
+                          <div className="inline-flex items-center px-3 py-1 bg-yellow-100 text-black text-sm font-medium rounded-lg">
+                            <span>{gmailAddress}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -294,7 +303,7 @@ export default function CheckoutPage() {
                         />
                         <div>
                           <span className="text-sm font-medium text-gray-700">
-                            Please take a screenshot of the order summary (the total amount) 🎉<br />
+                            Please take a screenshot of the FULL order summary (which notes + total amount) 🎉<br />
                             We need this screnshot to send you notes
                           </span>
                           <p className="text-xs text-red-600 font-medium mt-1">
