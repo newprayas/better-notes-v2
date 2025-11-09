@@ -4,9 +4,14 @@ import { Star, BookOpen, Users, Award, Lightbulb, Brain, Target, Clock, RefreshC
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import ImageSlideshow from '@/components/ui/image-slideshow';
+import YouTubeVideoSlideshow from '@/components/ui/youtube-video-slideshow';
 import ScrollAnimate from '@/components/ui/scroll-animate';
+import { getYouTubeVideos } from '@/lib/sanity/api';
 
 export default async function Home() {
+  // Fetch YouTube videos
+  const youtubeVideos = await getYouTubeVideos();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -68,14 +73,31 @@ export default async function Home() {
         </section>
         </ScrollAnimate>
 
+        {/* YouTube Videos Section */}
+        {youtubeVideos && youtubeVideos.length > 0 && (
+          <ScrollAnimate>
+          <section className="py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white">
+            <div className="container">
+              <div className="max-w-4xl mx-auto text-center">
+                <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">A passion for teaching ❤️</h2>
+                <p className="text-lg text-gray-700 mb-8">
+                  Check out my youtube channels for lectures <a href="http://www.youtube.com/@better_notes182" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">@better_notes182</a> (see below for site content) 🥳
+                </p>
+                <YouTubeVideoSlideshow videos={youtubeVideos} />
+              </div>
+            </div>
+          </section>
+          </ScrollAnimate>
+        )}
+
         {/* Need Guidance Section */}
         <ScrollAnimate>
         <section className="py-12 md:py-8 bg-gradient-to-b from-blue-50 to-purple-50 rounded-3xl mx-4 md:mx-8">
           <div className="container">
             <div className="max-w-4xl mx-auto">
               <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">Need Guidance?</h2>
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">I Teach Medical Students</h3>
+                <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">Need Guidence?</h2>
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">🎉 I Teach Medical Students 🎉</h3>
                 
                 <div className="bg-white rounded-3xl p-6 md:p-8 shadow-lg mb-4">
                   <div className="space-y-4 mb-6">

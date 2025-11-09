@@ -1,7 +1,7 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
-import { noteSchema, discountCodeSchema, subjectSchema, slideshowSchema } from './lib/sanity/schema'
+import { noteSchema, discountCodeSchema, subjectSchema, slideshowSchema, youtubeVideoSchema } from './lib/sanity/schema'
 
 const config = defineConfig({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 't1y8nndf',
@@ -16,6 +16,10 @@ const config = defineConfig({
               .title('🎠 Slideshow')
               .schemaType('slideshow')
               .child(S.documentTypeList('slideshow').title('Slideshow Images')),
+            S.listItem()
+              .title('📺 YouTube Videos')
+              .schemaType('youtubeVideo')
+              .child(S.documentTypeList('youtubeVideo').title('YouTube Videos')),
             S.listItem()
               .title('Notes')
               .schemaType('note')
@@ -33,7 +37,7 @@ const config = defineConfig({
     visionTool(),
   ],
   schema: {
-    types: [noteSchema, discountCodeSchema, subjectSchema, slideshowSchema],
+    types: [noteSchema, discountCodeSchema, subjectSchema, slideshowSchema, youtubeVideoSchema],
   },
 })
 

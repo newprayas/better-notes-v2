@@ -1,5 +1,5 @@
 import { client } from './client';
-import { Note, DiscountCode, NoteFilters, Subject, Slideshow } from '@/types';
+import { Note, DiscountCode, NoteFilters, Subject, Slideshow, YouTubeVideo } from '@/types';
 
 // Get all notes with optional filtering
 export async function getNotes(filters?: NoteFilters): Promise<Note[]> {
@@ -354,4 +354,41 @@ export async function getActiveSlideshow(): Promise<Slideshow | null> {
   }`;
   
   return await client.fetch(query);
+}
+
+// Get all active YouTube videos
+export async function getYouTubeVideos(): Promise<YouTubeVideo[]> {
+  const query = `*[_type == "youtubeVideo" && isActive == true] | order(order asc, createdAt asc) {
+    _id,
+    _type,
+    title,
+    youtubeUrl,
+    description,
+    order,
+    isActive,
+    createdAt,
+    updatedAt
+  }`;
+  
+  return await client.fetch(query);
+}
+
+// Helper function to extract YouTube video ID from URL
+export function extractYouTubeId(url: string): string | null {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+// Helper function to get YouTube thumbnail URL
+export function getYouTubeThumbnail(url: string, quality: 'default' | 'medium' | 'high' = 'default'): string | null {
+  const videoId = extractYouTubeId(url);
+  if (!videoId) return null;
+  
+  const qualityMap = {
+    default: 'default',
+    medium: 'mqdefault',
+    high: 'hqdefault'
+  };
+  
+  return `https://img.youtube.com/vi/${videoId}/${qualityMap[quality]}.jpg`;
 }

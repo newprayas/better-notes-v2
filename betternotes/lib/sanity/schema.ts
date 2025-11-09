@@ -284,3 +284,75 @@ export const slideshowSchema = {
     }),
   },
 };
+
+// YouTube video schema for Sanity CMS
+export const youtubeVideoSchema = {
+  name: 'youtubeVideo',
+  title: '📺 YouTube Video',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Video Title',
+      type: 'string',
+      validation: (Rule: import('sanity').Rule) => Rule.required(),
+    },
+    {
+      name: 'youtubeUrl',
+      title: 'YouTube URL',
+      type: 'url',
+      description: 'Paste the full YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)',
+      validation: (Rule: import('sanity').Rule) =>
+        Rule.required()
+          .uri({ scheme: ['http', 'https'] })
+          .custom((value: string) => {
+            if (!value) return true;
+            // Check if it's a valid YouTube URL
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+            return youtubeRegex.test(value) ? true : 'Please enter a valid YouTube URL';
+          }),
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      description: 'Optional description of the video content',
+    },
+    {
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+      description: 'Lower numbers appear first in the slideshow',
+      initialValue: 0,
+    },
+    {
+      name: 'isActive',
+      title: 'Active',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Whether this video should be displayed in the slideshow',
+    },
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      url: 'youtubeUrl',
+      isActive: 'isActive',
+    },
+    prepare: (selection: { title?: string; url?: string; isActive?: boolean }) => {
+      // Extract video ID from URL for thumbnail
+      let videoId = '';
+      if (selection.url) {
+        const match = selection.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+        if (match) {
+          videoId = match[1];
+        }
+      }
+      
+      return {
+        title: selection.title || 'Untitled Video',
+        subtitle: videoId ? `YouTube ID: ${videoId} - ${selection.isActive ? 'Active' : 'Inactive'}` : 'Invalid URL',
+      };
+    },
+  },
+};

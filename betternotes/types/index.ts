@@ -112,6 +112,19 @@ export interface Slideshow {
   updatedAt?: string;
 }
 
+// YouTube video types
+export interface YouTubeVideo {
+  _id: string;
+  _type: 'youtubeVideo';
+  title: string;
+  youtubeUrl: string;
+  description?: string;
+  order?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // Contact information
 export interface ContactInfo {
   telegram: string;

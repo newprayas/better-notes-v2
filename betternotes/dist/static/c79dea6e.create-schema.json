@@ -336,5 +336,81 @@
     "name": "slideshow",
     "type": "document",
     "title": "🎠 Slideshow Images"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Video Title"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Paste the full YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)",
+        "name": "youtubeUrl",
+        "type": "url",
+        "title": "YouTube URL"
+      },
+      {
+        "description": "Optional description of the video content",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "initialValue": 0,
+        "description": "Lower numbers appear first in the slideshow",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Whether this video should be displayed in the slideshow",
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Active"
+      }
+    ],
+    "name": "youtubeVideo",
+    "type": "document",
+    "title": "📺 YouTube Video"
   }
 ]
