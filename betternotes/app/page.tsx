@@ -75,7 +75,7 @@ export default async function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">Need Guidance?</h2>
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">I Teach Medical students</h3>
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">I Teach Medical Students</h3>
                 
                 <div className="bg-white rounded-3xl p-6 md:p-8 shadow-lg mb-4">
                   <div className="space-y-4 mb-6">
@@ -90,33 +90,28 @@ export default async function Home() {
                   
                 
                   
-                  <div className="bg-yellow-50 rounded-lg p-6 mb-8 text-center">
-                    <h4 className="text-lg font-bold text-black mb-4">Tips on</h4>
-                    <ul className="space-y-3 text-gray-700 text-center">
-                      <li className="flex flex-col items-center justify-center">
-                        <span className="mb-1">🎯 How to study?</span>
-                        <span>In the most effective way ✨</span>
-                      </li>
-                      <li className="flex flex-col items-center justify-center">
-                        <span className="mb-1">🎯 Which questions are important?</span>
-                        <span>For each exam ✨</span>
-                      </li>
-                      <li className="flex flex-col items-center justify-center">
-                        <span className="mb-1">🎯 How to answer in exams?</span>
-                        <span>The best practices ✨</span>
-                      </li>
-                      <li className="flex flex-col items-center justify-center">
-                        <span className="mb-1">🎯 What to focus on for exams?</span>
-                        <span>To study effiecntly ✨</span>
-                      </li>
-                      <li className="flex flex-col items-center justify-center">
-                        <span className="mb-1">🎯 What resources I use in my own studies?</span>
-                        <span>To make studing easier ✨</span>
-                      </li>
-                      <li className="flex items-center justify-center">
+                  <div className="bg-yellow-50 rounded-lg p-4 mb-8 text-center">
+                    <h4 className="text-lg font-bold text-black mb-3">Tips on</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-700">
+                      <div className="flex items-center justify-center">
+                        <span>🎯 How to study?</span>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <span>🎯 Which questions are important?</span>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <span>🎯 How to answer in exams?</span>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <span>🎯 What to focus on?</span>
+                      </div>
+                      <div className="flex items-center justify-center md:col-span-2">
+                        <span>🎯 What resources to use to make studies easier?</span>
+                      </div>
+                      <div className="flex items-center justify-center md:col-span-2 font-bold text-lg mt-2">
                         <span>And MUCH MORE! 🎉</span>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="mb-8">
