@@ -83,7 +83,7 @@ export default async function Home() {
                 <p className="text-lg text-gray-700 mb-8">
                   Check out my youtube channels for lectures <a href="http://www.youtube.com/@better_notes182" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">@better_notes182</a> (see below for site content) 🥳
                 </p>
-                <YouTubeVideoSlideshow videos={youtubeVideos} />
+                <YouTubeVideoSlideshow videos={youtubeVideos} autoPlayInterval={2000} />
               </div>
             </div>
           </section>
