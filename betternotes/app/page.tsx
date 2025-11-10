@@ -81,7 +81,7 @@ export default async function Home() {
               <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">A passion for teaching ❤️</h2>
                 <p className="text-lg text-gray-700 mb-8">
-                  Check out my youtube channels for lectures <a href="http://www.youtube.com/@better_notes182" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">@better_notes182</a> (see below for site content) 🥳
+                  Check out my Youtube Channel for lectures <a href="http://www.youtube.com/@better_notes182" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">@better_notes182</a> 🥳
                 </p>
                 <YouTubeVideoSlideshow videos={youtubeVideos} autoPlayInterval={2000} />
               </div>
@@ -97,7 +97,7 @@ export default async function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">Need Guidence?</h2>
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">🎉 I Teach Medical Students 🎉</h3>
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">🎉 I love teaching 🎉</h3>
                 
                 <div className="bg-white rounded-3xl p-6 md:p-8 shadow-lg mb-4">
                   <div className="space-y-4 mb-6">
