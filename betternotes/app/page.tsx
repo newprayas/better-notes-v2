@@ -79,7 +79,7 @@ export default async function Home() {
           <section className="py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white">
             <div className="container">
               <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-3xl font-bold text-black mb-4">A passion for teaching ❤️</h2>
+                <h2 className="text-2xl md:text-2xl font-bold text-black mb-4">A passion for teaching ❤️</h2>
                 <p className="text-lg text-gray-700 mb-8">
                   Check out my Youtube Channel for lectures <a href="http://www.youtube.com/@better_notes182" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">@better_notes182</a> 🥳
                 </p>
