@@ -24,6 +24,7 @@
     "@sanity/structure": "^2.36.2",
     "@sanity/vision": "^4.13.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "lucide-react": "^0.552.0",
     "next": "16.0.1",
     "next-sanity": "^11.6.5",

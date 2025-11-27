@@ -8,6 +8,8 @@ import YouTubeVideoSlideshow from '@/components/ui/youtube-video-slideshow';
 import ScrollAnimate from '@/components/ui/scroll-animate';
 import { getYouTubeVideos } from '@/lib/sanity/api';
 
+export const revalidate = 60; // Revalidate every 60 seconds
+
 export default async function Home() {
   // Fetch YouTube videos
   const youtubeVideos = await getYouTubeVideos();
