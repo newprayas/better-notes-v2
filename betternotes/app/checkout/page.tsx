@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -10,7 +10,6 @@ import {
   Minus, 
   Tag, 
   Send, 
-  Check,
   X,
   Copy
 } from 'lucide-react';
@@ -19,6 +18,7 @@ import Footer from '@/components/layout/footer';
 import PromotionalOffers from '@/components/checkout/promotional-offers';
 import { useCart } from '@/lib/cart-context';
 import { validateDiscountCode } from '@/lib/sanity/api';
+import type { Cart } from '@/types';
 
 export default function CheckoutPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, applyDiscountCode, removeDiscountCode } = useCart();
@@ -26,12 +26,18 @@ export default function CheckoutPage() {
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
   const [discountError, setDiscountError] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<Cart | null>(null);
+  const [completedGmail, setCompletedGmail] = useState('');
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   
   // New state for validation steps
   const [gmailAddress, setGmailAddress] = useState('');
   const [emailConfirmed, setEmailConfirmed] = useState(false);
-  const [screenshotConfirmed, setScreenshotConfirmed] = useState(false);
+
+  useEffect(() => {
+    // Present the completed-order receipt from its heading, not the previous checkout scroll position.
+    if (orderPlaced) window.scrollTo(0, 0);
+  }, [orderPlaced]);
 
   const handleApplyDiscountCode = async () => {
     if (!discountCodeInput.trim()) return;
@@ -63,7 +69,10 @@ export default function CheckoutPage() {
   };
 
   const handlePlaceOrder = () => {
-    // In a real app, this would process the order
+    // Preserve the order details so the receipt remains visible after clearing the cart.
+    setCompletedOrder({ ...cart, items: [...cart.items] });
+    // Keep the confirmed delivery address alongside the receipt details.
+    setCompletedGmail(gmailAddress);
     setOrderPlaced(true);
     clearCart();
   };
@@ -74,63 +83,79 @@ export default function CheckoutPage() {
     setTimeout(() => setCopiedToClipboard(false), 2000);
   };
 
-  const telegramUsername = '@prayas_ojha';
   const orderMessage = `Hi! I'd like to purchase the following notes:\n\n${cart.items.map(item => `${item.note.title} (x${item.quantity}) - ₹${(item.note.price || 0) * item.quantity}`).join('\n')}\n\nTotal: ₹${cart.finalTotal}`;
 
   if (orderPlaced) {
+    const receipt = completedOrder ?? cart;
+
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
         
-        <main className="flex-grow bg-gray-50 py-12">
+        <main className="flex-grow bg-gray-50 py-4 md:py-8">
           <div className="container">
             <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm p-8 text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-green-600" />
-              </div>
+              <h1 className="text-2xl font-bold text-black mb-2">Order Placed Successfully!</h1>
               
-              <h1 className="text-2xl font-bold text-black mb-4">Order Placed Successfully!</h1>
-              
-              <p className="text-gray-700 mb-6">
-                Thank you for your order! Please contact us on Telegram to complete your purchase and receive your notes.
+              <p className="text-lg font-semibold text-gray-700 mb-6">
+                ✅ Please take screenshot
               </p>
               
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-                <h2 className="text-lg font-semibold mb-4">Next Steps:</h2>
-                <div className="text-left space-y-3">
-                  <div className="flex items-center">
-                    <span className="text-lg mr-2">🎉</span>
-                    <span>Contact us on Telegram with your order details</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-lg mr-2">✅</span>
-                    <span className="font-bold text-blue-600">Please SEND the screenshot you took via telegram</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-lg mr-2">🎉</span>
-                    <span>Receive your notes in your Google Docs - link will be sent to telegram.</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-lg mr-2">🎉</span>
-                    <span>Make payment ONLY AFTER you have received your notes ❤️</span>
+              {/* Keep the completed-order receipt focused on details needed for a screenshot. */}
+              <div className="bg-white border-2 border-black rounded-lg p-6 mb-6 text-left">
+                <h2 className="text-xl font-bold text-black mb-6">Order Summary</h2>
+                <div className="space-y-2">
+                  {receipt.items.map((item) => (
+                    <div key={item.note._id} className="flex justify-between items-start gap-2">
+                      <span className="text-gray-700 break-words">{item.note.title}</span>
+                      <span className="font-medium flex-shrink-0">{item.note.price || 0} tk</span>
+                    </div>
+                  ))}
+
+                  <div className="border-t border-gray-200 pt-2 mt-2">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-600">Price Before Discount</span>
+                      <span className="font-medium">{receipt.total} tk</span>
+                    </div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-600">Quantity Discount</span>
+                      <span className={`font-medium ${(receipt.quantityDiscount || 0) > 0 ? 'text-green-600' : 'text-gray-500'}`}>
+                        -{receipt.quantityDiscount || 0} tk
+                      </span>
+                    </div>
+                    {receipt.discountCode && (
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-600">Discount ({receipt.discountCode})</span>
+                        <span className="font-medium text-green-600">-{receipt.discountAmount || 0} tk</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold">Total</span>
+                      <span className="font-bold">{receipt.finalTotal} tk</span>
+                    </div>
+                    {completedGmail && (
+                      <div className="flex flex-col items-start border-t border-gray-200 pt-3 mt-3">
+                        <span className="font-semibold text-gray-700">Gmail</span>
+                        {/* Keep the highlighted delivery address readable as one line in receipt screenshots. */}
+                        <span className="self-start mt-2 bg-yellow-100 px-1 py-0.5 rounded text-sm font-medium whitespace-nowrap">{completedGmail}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex justify-center">
+                {/* Telegram blue makes the action's destination immediately clear. */}
                 <a
                   href="https://t.me/prayas_ojha"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-500 transition-colors"
+                  className="inline-flex items-center px-6 py-3 bg-[#229ED9] text-white font-bold rounded-lg hover:bg-[#1d8bc0] transition-colors"
                 >
                   <Send className="w-5 h-5 mr-2" />
                   Contact on Telegram
                 </a>
-                <Link href="/" className="inline-flex items-center px-6 py-3 bg-yellow-100 text-black font-bold rounded-full hover:bg-yellow-200 transition-colors">
-                  Continue Shopping
-                </Link>
               </div>
             </div>
           </div>
@@ -291,34 +316,12 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
-                  {/* Screenshot Confirmation Checkbox */}
-                  {emailConfirmed && (
-                    <div className="mb-4">
-                      <label className="flex items-start space-x-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={screenshotConfirmed}
-                          onChange={(e) => setScreenshotConfirmed(e.target.checked)}
-                          className="mt-1 w-5 h-5 text-yellow-400 border-gray-300 rounded focus:ring-yellow-400"
-                        />
-                        <div>
-                          <span className="text-sm font-medium text-gray-700">
-                            Please take a screenshot of the FULL order summary (which notes + total amount) 🎉<br />
-                            We need this screnshot to send you notes
-                          </span>
-                          <p className="text-xs text-red-600 font-medium mt-1">
-                            YES I HAVE TAKEN THE SCREENSHOT
-                          </p>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-
                   <button
                     onClick={handlePlaceOrder}
-                    disabled={!gmailAddress || !emailConfirmed || !screenshotConfirmed}
+                    disabled={!gmailAddress || !emailConfirmed}
                     className={`w-full px-6 py-3 rounded-lg font-bold transition-colors text-center ${
-                      gmailAddress && emailConfirmed && screenshotConfirmed
+                      // Screenshot instructions are shown on the receipt, so they do not block ordering here.
+                      gmailAddress && emailConfirmed
                         ? 'bg-yellow-400 text-black hover:bg-yellow-500'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
@@ -331,16 +334,6 @@ export default function CheckoutPage() {
                   </p>
                 </div>
 
-                {/* Contact Information */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-900 mb-2">How to Complete Your Order</h3>
-                  <ol className="text-sm text-blue-800 space-y-1">
-                    <li>1. Click "Place Order" to confirm your selection</li>
-                    <li>2. Contact us on Telegram at {telegramUsername}</li>
-                    <li>3. Share your order details and complete payment</li>
-                    <li>4. Receive your notes instantly</li>
-                  </ol>
-                </div>
                 </div>
               </div>
             </div>

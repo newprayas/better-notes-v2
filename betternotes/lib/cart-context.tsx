@@ -17,6 +17,20 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Keep checkout calculations and the special-offers UI on the same discount rules.
+export const quantityDiscountTiers = [
+  { minItems: 2, discount: 50 },
+  { minItems: 4, discount: 150 },
+  { minItems: 6, discount: 250 },
+  { minItems: 8, discount: 350 },
+];
+
+const getQuantityDiscount = (itemCount: number) =>
+  quantityDiscountTiers.reduce(
+    (discount, tier) => (itemCount >= tier.minItems ? tier.discount : discount),
+    0
+  );
+
 type CartAction =
   | { type: 'ADD_TO_CART'; payload: { note: Note; quantity: number } }
   | { type: 'REMOVE_FROM_CART'; payload: string }
@@ -45,12 +59,7 @@ const cartReducer = (state: Cart, action: CartAction): Cart => {
       const total = newItems.reduce((sum, item) => sum + ((item.note.price || 0) * item.quantity), 0);
       const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
       
-      // Calculate quantity-based discount
-      let quantityDiscount = 0;
-      if (itemCount >= 8) quantityDiscount = 250;
-      else if (itemCount >= 6) quantityDiscount = 200;
-      else if (itemCount >= 4) quantityDiscount = 150;
-      else if (itemCount >= 2) quantityDiscount = 50;
+      const quantityDiscount = getQuantityDiscount(itemCount);
       
       const codeDiscountAmount = state.discountCode ? (total * (state.discountAmount! / 100)) : 0;
       const totalDiscount = quantityDiscount + codeDiscountAmount;
@@ -71,12 +80,7 @@ const cartReducer = (state: Cart, action: CartAction): Cart => {
       const total = newItems.reduce((sum, item) => sum + ((item.note.price || 0) * item.quantity), 0);
       const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
       
-      // Calculate quantity-based discount
-      let quantityDiscount = 0;
-      if (itemCount >= 8) quantityDiscount = 250;
-      else if (itemCount >= 6) quantityDiscount = 200;
-      else if (itemCount >= 4) quantityDiscount = 150;
-      else if (itemCount >= 2) quantityDiscount = 50;
+      const quantityDiscount = getQuantityDiscount(itemCount);
       
       const codeDiscountAmount = state.discountCode ? (total * (state.discountAmount! / 100)) : 0;
       const totalDiscount = quantityDiscount + codeDiscountAmount;
@@ -105,12 +109,7 @@ const cartReducer = (state: Cart, action: CartAction): Cart => {
       const total = newItems.reduce((sum, item) => sum + ((item.note.price || 0) * item.quantity), 0);
       const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
       
-      // Calculate quantity-based discount
-      let quantityDiscount = 0;
-      if (itemCount >= 8) quantityDiscount = 250;
-      else if (itemCount >= 6) quantityDiscount = 200;
-      else if (itemCount >= 4) quantityDiscount = 150;
-      else if (itemCount >= 2) quantityDiscount = 50;
+      const quantityDiscount = getQuantityDiscount(itemCount);
       
       const codeDiscountAmount = state.discountCode ? (total * (state.discountAmount! / 100)) : 0;
       const totalDiscount = quantityDiscount + codeDiscountAmount;

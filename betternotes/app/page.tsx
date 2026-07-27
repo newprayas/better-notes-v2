@@ -55,6 +55,14 @@ export default async function Home() {
                   <h3 className="text-xl font-bold text-black mb-2">@Prayas Raj Ojha</h3>
                 </div>
                 
+                <div className="mb-4 space-y-2">
+                  {/* Keep the headline achievements visually separate from the subject honours below. */}
+                  <p className="text-lg font-bold">🏅 Gold Medalist 🏅</p>
+                  <p className="text-lg font-bold">📚 Rank 2 CMC 📚</p>
+                  {/* A short divider clearly separates headline accolades from subject honours. */}
+                  <div className="w-24 mx-auto border-t-2 border-gray-400 pt-2" />
+                </div>
+
                 <div className="mb-6">
                   <div className="space-y-2">
                     <p className="text-lg font-bold">🎉 Honours in Anatomy </p>

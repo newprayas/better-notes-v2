@@ -1,83 +1,31 @@
 'use client';
 
-import { useCart } from '@/lib/cart-context';
+import { quantityDiscountTiers, useCart } from '@/lib/cart-context';
 
 const PromotionalOffers = () => {
   const { itemCount } = useCart();
 
-  // Define discount tiers
-  const discountTiers = [
-    { minItems: 2, discount: 50 },
-    { minItems: 4, discount: 150 },
-    { minItems: 6, discount: 200 },
-    { minItems: 8, discount: 250 }
-  ];
-
-  // Determine which message to show based on cart count
+  // Derive the offer message from the shared tiers so it cannot differ from checkout totals.
   const getDiscountMessage = () => {
     if (itemCount === 0) return null;
-    
-    if (itemCount === 1) {
-      return {
-        firstPill: {
-          text: `Add 1 more note for : `,
-          discount: "❤️ 50 tk discount! ❤️"
-        },
-        secondPill: {
-          text: `🎉 You're saving 0 tk! 🎉`
-        }
-      };
-    }
-    
-    if (itemCount === 2 || itemCount === 3) {
-      return {
-        firstPill: {
-          text: `Add ${itemCount === 2 ? 2 : 1} more notes for : `,
-          discount: "❤️ 150 tk discount! ❤️"
-        },
-        secondPill: {
-          text: `🎉 You're saving 50 tk! 🎉`
-        }
-      };
-    }
-    
-    if (itemCount === 4 || itemCount === 5) {
-      return {
-        firstPill: {
-          text: `Add ${itemCount === 4 ? 2 : 1} more notes for : `,
-          discount: "❤️ 200 tk discount! ❤️"
-        },
-        secondPill: {
-          text: `🎉 You're saving 150 tk! 🎉`
-        }
-      };
-    }
-    
-    if (itemCount === 6 || itemCount === 7) {
-      return {
-        firstPill: {
-          text: `Add ${itemCount === 6 ? 2 : 1} more notes for : `,
-          discount: "❤️ 250 tk discount! ❤️"
-        },
-        secondPill: {
-          text: `🎉 You're saving 200 tk! 🎉`
-        }
-      };
-    }
-    
-    if (itemCount >= 8) {
-      return {
-        firstPill: {
-          text: `You've unlocked maximum discount!`,
-          discount: ""
-        },
-        secondPill: {
-          text: `🎉 You're saving 250 tk! 🎉`
-        }
-      };
-    }
-    
-    return null;
+    const currentTier = quantityDiscountTiers.reduce(
+      (tier, candidate) => (itemCount >= candidate.minItems ? candidate : tier),
+      undefined as (typeof quantityDiscountTiers)[number] | undefined
+    );
+    const nextTier = quantityDiscountTiers.find((tier) => tier.minItems > itemCount);
+    const notesNeeded = nextTier ? nextTier.minItems - itemCount : 0;
+
+    return {
+      firstPill: nextTier
+        ? {
+            text: `Add ${notesNeeded} more ${notesNeeded === 1 ? 'note' : 'notes'} for:`,
+            discount: `❤️ ${nextTier.discount} tk discount! ❤️`,
+          }
+        : { text: "You've unlocked maximum discount!", discount: '' },
+      secondPill: {
+        text: `🎉 You're saving ${currentTier?.discount || 0} tk! 🎉`,
+      },
+    };
   };
 
   const discountMessage = getDiscountMessage();
@@ -89,12 +37,12 @@ const PromotionalOffers = () => {
         <h2 className="text-xl font-bold text-black mb-3 text-center">🎉 Special Offers 🎉</h2>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 max-w-4xl mx-auto">
-          {discountTiers.map((tier, index) => {
+          {quantityDiscountTiers.map((tier) => {
             const isActive = itemCount >= tier.minItems;
             
             return (
               <div
-                key={index}
+                key={tier.minItems}
                 className={`rounded-md p-2 transition-all duration-300 border ${
                   isActive
                     ? 'bg-yellow-50 text-gray-900 border-yellow-300'
